@@ -1,0 +1,26 @@
+{
+  "name": "php-to-node",
+  "version": "0.0.1",
+  "description": "A CLI tool and helper functions for porting PHP to node.",
+  "author": "Robert Dominy <rdominy+github@gmail.com>",
+  "homepage": "https://github.com/rdominy/php-to-node",
+  "license": "MIT",
+  "main": "php-to-node.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdominy/php-to-node"
+  },
+  "bugs": {
+    "url": "https://github.com/rdominy/php-to-node/issues"
+  },
+  "bin": {
+    "php-to-node": "./translate.js"
+  },
+  "keywords": [
+    "php"
+  ],
+  "dependencies": {
+    "pixl-args": "^1.0.3"
+  },
+  "devDependencies": {}
+}
