@@ -18,19 +18,22 @@ class TestClass {
 	}
 	
 	public function getLength($str) {
-		return strlen($str);
+		$result = strlen($str);  // test local variable declarations
+		return $result;
 	}
 
 	public function hashTest($hash, $key) {
+		$result = null;
 		if (empty($hash)) {
-			return "empty";
+			$result = "empty";
 		}
-		if (!isset($hash[$key])) {
-			return "!isset";
+		else if (!isset($hash[$key])) {
+			$result = "!isset";
 		}
 		else {
-			return "isset";
-		}	
+			$result = "isset";
+		}
+		return $result;
 	}
 
 	protected function rad($deg)
@@ -40,6 +43,10 @@ class TestClass {
 	
 	static protected function anyNum($min, $max) {
 		return mt_rand($min, $max);
+	}
+	
+	public function getMemUsage() {
+		return memory_get_usage();
 	}
 }
 

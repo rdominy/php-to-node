@@ -15,12 +15,7 @@ if (process.argv.length < 3) {
 	process.exit(0);
 }
 
-console.log('"use strict";');
-console.log('const php = require("' + args.get('require') + '");');
 
-const rl = readline.createInterface({
-	input: fs.createReadStream(process.argv[2])
-});
 
 
 var transforms = [
@@ -97,7 +92,12 @@ var transforms = [
 	},
 	{	search: new RegExp(/(\s+|\()strlen\s*\(/g),
 		replace: '$1php.strlen('
-	}
+	},
+	{	search: new RegExp(/memory_get_usage\s*\([^\)]*\)/g),
+		replace: 'process.memoryUsage().rss',
+		requires: 'process'
+	},
+	
 	
 ];
 
@@ -105,15 +105,37 @@ var transforms = [
 var classBegin = false;
 var inConstructor = false;
 var gotConstructorBrace = false;
+var functionBegin = false;
 var atEnd = false;
 
 // Accumulate data members to add to constructor
 var members = [];
 var classes = [];
+var lines = [];
+var requires = [];
+var variables = [];
+
+function writeLn(line) {
+	lines.push(line);
+}
+
+function flushBuffer() {
+	console.log('"use strict";');
+	console.log('const php = require("' + args.get('require') + '");');
+	requires.forEach(function(req) { console.log("const " + req + " = require('" + req + "');") });
+	lines.forEach(function(lines) {console.log(lines);});
+}
+
+function addRequires(newRequire) {
+	if (requires.indexOf(newRequire)==-1) {
+		requires.push(newRequire);
+	}
+}
 
 function checkLine(line) {
 	if (/^\s*class/.test(line)) {
 		classBegin = true;
+		functionBegin = false;
 		
 		var matches = line.match(/^\s*class\s+(\w+)/);
 		if (matches && matches.length>=2) {
@@ -127,6 +149,12 @@ function checkLine(line) {
 	else if (/^\s*(public|protected|private)\s+function\s+/.test(line)) {
 		classBegin = false;
 		inConstructor = false;
+	}
+	
+	// If we're starting a new function or method, reset variable declarations
+	if (/^\s*(public\s+|protected\s+|private\s+)*function/.test(line)) {
+		functionBegin = true;
+		variables = [];
 	}
 
 	if (inConstructor) {
@@ -148,17 +176,22 @@ function createDataMember(newLine) {
 
 function dumpMembers() {
 	members.forEach( function(member) {
-		console.log(member);
+		writeLn(member);
 	});
 	members = [];
 }
 
 function exportClasses() {
 	classes.forEach( function(className) {
-		console.log('module.exports = '+className+';');
+		writeLn('module.exports = '+className+';');
 	});
 	classes = [];
 }
+
+
+const rl = readline.createInterface({
+	input: fs.createReadStream(process.argv[2])
+});
 
 rl.on('line', function (line) {
 	var newLine = line;
@@ -166,7 +199,13 @@ rl.on('line', function (line) {
 	checkLine(newLine);
 	
 	transforms.forEach(function(transform) {
-		newLine = newLine.replace(transform.search,transform.replace);
+		if (transform.search.test(newLine)) {
+			newLine = newLine.replace(transform.search,transform.replace);
+			if (transform.requires) {
+				addRequires(transform.requires);
+			}
+		}
+		
 	});
 	
 	if (classBegin) {
@@ -178,13 +217,23 @@ rl.on('line', function (line) {
 	
 	if (!classBegin && !inConstructor &&  members.length>0) {
 		// Constructor must not be first method so define one now
-		console.log("\tconstructor() {");
+		writeLn("\tconstructor() {");
 		dumpMembers();
-		console.log("\t}\n\n");
+		writeLn("\t}\n\n");
+	}
+	
+	if (functionBegin && /^\s*\w+\s*\=/.test(newLine)) {
+		var matches = newLine.match(/^(\s*)(\w+)(\s*\=.+)$/);
+		var whitespace = (matches.length == 4)  ? matches[1] : '';
+		var varName = matches[matches.length-2];
+		if (variables.indexOf(varName)==-1) {
+			newLine = whitespace + 'var ' + varName + matches[matches.length-1];
+			variables.push(varName);
+		}
 	}
 	
 	if (newLine!==null) {
-		console.log(newLine);
+		writeLn(newLine);
 	}
 	
 	if (inConstructor && gotConstructorBrace && members.length>0) {
@@ -193,5 +242,6 @@ rl.on('line', function (line) {
 	
 	if (atEnd) {
 		exportClasses();
+		flushBuffer();
 	}
 });

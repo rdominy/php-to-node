@@ -49,6 +49,7 @@ describe('php-to-node', function() {
 			assert(result>=1);
 			assert(result<=6);
 			assert(testObj.rad(90));
+			assert(testObj.getMemUsage()>0);
 		});
 	});
 });
