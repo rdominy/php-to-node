@@ -43,6 +43,7 @@ module.file_exists = function(filePath) {
 		var stats = fs.statSync(filePath);
 		exists = true;
 	}
+	catch(e) {}
 	return exists;
 }
 
