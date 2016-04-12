@@ -37,7 +37,7 @@ module.exports.strlen = function(obj) {
 	return (obj && obj.length) ? obj.length : 0;
 }
 
-module.file_exists = function(filePath) {
+module.exports.file_exists = function(filePath) {
 	var exists = false;
 	try {
 		var stats = fs.statSync(filePath);
@@ -47,11 +47,11 @@ module.file_exists = function(filePath) {
 	return exists;
 }
 
-module.array_key_exists = function(needle, haystack) {
+module.exports.array_key_exists = function(needle, haystack) {
 	return haystack[needle] !== undefined;
 }
 
-module.explode = function(sep, str) {
+module.exports.explode = function(sep, str) {
 	return str.split(sep);
 }
 

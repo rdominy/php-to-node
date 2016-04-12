@@ -50,6 +50,7 @@ describe('php-to-node', function() {
 			assert(result<=6);
 			assert(testObj.rad(90));
 			assert(testObj.getMemUsage()>0);
+			assert.equal('exists',testObj.testMany('foo.js,' + __dirname + '/test.js', {findex:1}));
 		});
 	});
 });

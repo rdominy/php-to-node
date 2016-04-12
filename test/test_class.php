@@ -48,6 +48,18 @@ class TestClass {
 	public function getMemUsage() {
 		return memory_get_usage();
 	}
+	
+	public function testMany($filesString, $hash) {
+		$result = '';
+		$files = explode(',', $filesString);
+		
+		if (array_key_exists('findex', $hash)) {
+			if (file_exists($files[$hash['findex']])) {
+				$result = 'exists';
+			}
+		}
+		return $result;
+	}
 }
 
 ?>
