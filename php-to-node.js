@@ -1,5 +1,7 @@
 "use strict";
 
+const fs = require('fs');
+
 // PHP compatibility functions for porting PHP to JavaScript
 // Copyright (c) 2016 Robert Dominy
 // Released under the MIT License
@@ -33,6 +35,23 @@ module.exports.count = function(obj) {
 
 module.exports.strlen = function(obj) {
 	return (obj && obj.length) ? obj.length : 0;
+}
+
+module.file_exists = function(filePath) {
+	var exists = false;
+	try {
+		var stats = fs.statSync(filePath);
+		exists = true;
+	}
+	return exists;
+}
+
+module.array_key_exists = function(needle, haystack) {
+	return haystack[needle] !== undefined;
+}
+
+module.explode = function(sep, str) {
+	return str.split(sep);
 }
 
 Math.deg2rad = function(deg) {
