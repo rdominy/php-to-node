@@ -79,7 +79,8 @@ var transforms = [
 		replace: 'JSON.stringify'
 	},
 	{	search: new RegExp(/file_get_contents\s*\(([^\)]+)\)/g),
-		replace: 'fs.readFileSync($1, "utf-8")'
+		replace: 'fs.readFileSync($1, "utf-8")',
+		requires: 'fs'
 	},
 	{	search: new RegExp(/(\s+|\()count\s*\(/g),
 		replace: '$1php.count('
@@ -92,6 +93,15 @@ var transforms = [
 	},
 	{	search: new RegExp(/(\s+|\()strlen\s*\(/g),
 		replace: '$1php.strlen('
+	},
+	{	search: new RegExp(/file_exists\s*\(/g),
+		replace: 'php.file_exists('
+	},
+	{	search: new RegExp(/explode\s*\(/g),
+		replace: 'php.explode('
+	},
+	{	search: new RegExp(/array_key_exists\s*\(/g),
+		replace: 'php.array_key_exists('
 	},
 	{	search: new RegExp(/memory_get_usage\s*\([^\)]*\)/g),
 		replace: 'process.memoryUsage().rss',
@@ -171,7 +181,7 @@ function isDataMember(newLine) {
 }
 
 function createDataMember(newLine) {
-	return newLine.replace(/^(\s*)([\w\_])+\s*\=(.*)$/,"\t$1this.$2 =$3");
+	return newLine.replace(/^(\s*)([\w\_]+)\s*\=(.*)$/,"\t$1this.$2 =$3");
 }
 
 function dumpMembers() {

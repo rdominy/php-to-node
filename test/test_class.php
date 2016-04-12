@@ -6,15 +6,15 @@
 
 class TestClass {
 
-	private $a = null;
+	private $a_member = null;
 	
 	public function __construct($initA) {
-		$this->a = $initA;
+		$this->a_member = $initA;
 	}
 	
 	public function getA()
 	{
-		return $this->a;
+		return $this->a_member;
 	}
 	
 	public function getLength($str) {
