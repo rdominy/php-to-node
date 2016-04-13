@@ -60,6 +60,16 @@ class TestClass {
 		}
 		return $result;
 	}
+	public function exceptional() {
+		$result = '';
+		try {
+			throw new Exception("exception");
+		}
+		catch (Exception $e) {
+			$result = "caught";
+		}
+		return $result;
+	}
 }
 
 ?>

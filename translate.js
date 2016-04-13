@@ -55,6 +55,15 @@ var transforms = [
 	{	search: new RegExp(/\s+\.\s+/g),
 		replace: ' + '
 	},
+	// Change new Exception to Error
+	{	search: new RegExp(/new\s+Exception\s*\(/g),
+		replace: 'new Error('
+	},
+	// Remove type from catch
+	{
+		search: new RegExp(/catch\s*\(\s*\w+\s+/),
+		replace: 'catch ('
+	},
 	
 	// Builtin functions
 	{	search: new RegExp(/floatval/g),
