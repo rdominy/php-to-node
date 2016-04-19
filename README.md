@@ -6,7 +6,7 @@ This module provides compatibility functions to aid in porting PHP to JavaScript
 Use [npm](https://www.npmjs.com/) to install the module:
 
 ```
-	npm install php-to-node
+	sudo npm install php-to-node -g
 ```
 Run the CLI tool
 

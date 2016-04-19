@@ -87,6 +87,13 @@ var transforms = [
 	{	search: new RegExp(/json_encode/g),
 		replace: 'JSON.stringify'
 	},
+	// Note: escape/unescape are deprecated in favor of encode/decodeURI, but in practice they are not compatible with the PHP equivalents
+	{	search: new RegExp(/urlencode/g),
+		replace: 'escape'
+	},
+	{	search: new RegExp(/urldecode/g),
+		replace: 'unescape'
+	},
 	{	search: new RegExp(/file_get_contents\s*\(([^\)]+)\)/g),
 		replace: 'fs.readFileSync($1, "utf-8")',
 		requires: 'fs'
