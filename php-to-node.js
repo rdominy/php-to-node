@@ -55,6 +55,10 @@ module.exports.explode = function(sep, str) {
 	return str.split(sep);
 }
 
+module.exports.time = function() {
+	return Math.floor((new Date()).getTime()/1000);
+}
+
 Math.deg2rad = function(deg) {
 	return deg*Math.PI/180.0;
 }

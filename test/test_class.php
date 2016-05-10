@@ -70,6 +70,10 @@ class TestClass {
 		}
 		return $result;
 	}
+	
+	public function getTheTime() {
+		return time();
+	}
 }
 
 ?>
