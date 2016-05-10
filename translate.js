@@ -55,6 +55,10 @@ var transforms = [
 	{	search: new RegExp(/\s+\.\s+/g),
 		replace: ' + '
 	},
+	// String concatentation assignment operator
+	{	search: new RegExp(/\.\=/g),
+		replace: '+='
+	},
 	// Change new Exception to Error
 	{	search: new RegExp(/new\s+Exception\s*\(/g),
 		replace: 'new Error('
@@ -123,6 +127,9 @@ var transforms = [
 		replace: 'process.memoryUsage().rss',
 		requires: 'process'
 	},
+	{	search: new RegExp(/(\s+)time\(\)/g),
+		replace: '$1php.time()'
+	}
 	
 	
 ];
@@ -168,11 +175,11 @@ function checkLine(line) {
 			classes.push(matches[1]);
 		}
 	}
-	else if (/^\s*(public|protected|private)\s+function\s+__construct/.test(line)) {
+	else if (/^\s*(static)*\s*(public|protected|private)\s+function\s+__construct/.test(line)) {
 		inConstructor = true;
 		classBegin = false;
 	}
-	else if (/^\s*(public|protected|private)\s+function\s+/.test(line)) {
+	else if (/^\s*(static)*\s*(public|protected|private)\s+function\s+/.test(line)) {
 		classBegin = false;
 		inConstructor = false;
 	}

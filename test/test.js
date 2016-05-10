@@ -34,6 +34,9 @@ describe('php-to-node', function() {
 			assert(testObj);
 			var a = testObj.getA();
 			assert.equal(a,'foo');
+			var t = testObj.getTheTime();
+			assert(t);
+			assert(t>0);
 		});
 	});
 	describe('php-to-node module', function() {
