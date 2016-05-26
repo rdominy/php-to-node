@@ -74,6 +74,10 @@ class TestClass {
 	public function getTheTime() {
 		return time();
 	}
+	
+	public function myHTMLIsSpecial($html) {
+		return htmlspecialchars($html);
+	}
 }
 
 ?>

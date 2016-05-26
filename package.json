@@ -1,6 +1,6 @@
 {
   "name": "php-to-node",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A CLI tool and helper functions for porting PHP to node.",
   "author": "Robert Dominy <rdominy+github@gmail.com>",
   "homepage": "https://github.com/rdominy/php-to-node",

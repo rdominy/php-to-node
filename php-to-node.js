@@ -59,6 +59,19 @@ module.exports.time = function() {
 	return Math.floor((new Date()).getTime()/1000);
 }
 
+
+module.exports.htmlspecialchars = function(text) {
+	var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
 Math.deg2rad = function(deg) {
 	return deg*Math.PI/180.0;
 }

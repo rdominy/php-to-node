@@ -55,6 +55,7 @@ describe('php-to-node', function() {
 			assert(testObj.getMemUsage()>0);
 			assert.equal('exists', testObj.testMany('foo.js,' + __dirname + '/test.js', {findex:1}));
 			assert.equal('caught', testObj.exceptional());
+			assert.equal(testObj.myHTMLIsSpecial("<p>Some test text</p>"), "&lt;p&gt;Some test text&lt;/p&gt;");
 		});
 	});
 });

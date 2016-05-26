@@ -129,9 +129,10 @@ var transforms = [
 	},
 	{	search: new RegExp(/(\s+)time\(\)/g),
 		replace: '$1php.time()'
+	},
+	{	search: new RegExp(/htmlspecialchars\s*\(/g),
+		replace: 'php.htmlspecialchars('
 	}
-	
-	
 ];
 
 // Parsing States
