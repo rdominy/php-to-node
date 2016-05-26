@@ -11,7 +11,7 @@ module.exports.empty = function(a) {
 }
 
 module.exports.isset = function(a) {
-	return (typeof a != 'undefined');
+	return ((typeof a != 'undefined') && (a != null));
 }
 
 module.exports.defaultarg = function(a, def) {
