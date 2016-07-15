@@ -93,13 +93,13 @@ Number.prototype.pad = function(size) {
 }
 
 Array.prototype.sortAsc = function() {
-	return this.sort(function (a, b) {return a<b;});
-}
-
-Array.prototype.sortDesc = function() {
 	return this.sort(function (a, b) {return a>b;});
 }
 
+Array.prototype.sortDesc = function() {
+	return this.sort(function (a, b) {return a<b;});
+}
+
 Array.prototype.shuffle = function() {
-	return this.sort(function (a, b) {(Math.random()>.5)?true: false;});
+	return this.sort(function (a, b) {return ((Math.random()>.5) ? true : false);});
 }

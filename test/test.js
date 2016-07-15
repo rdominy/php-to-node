@@ -39,7 +39,7 @@ describe('php-to-node', function() {
 			assert(t>0);
 		});
 	});
-	describe('php-to-node module', function() {
+	describe('php-to-node module from converted file', function() {
 		it('compatibility functions work as expected', function() {
 			assert(testObj);
 			assert.equal(3,testObj.getLength('bar'));
@@ -58,4 +58,31 @@ describe('php-to-node', function() {
 			assert.equal(testObj.myHTMLIsSpecial("<p>Some test text</p>"), "&lt;p&gt;Some test text&lt;/p&gt;");
 		});
 	});
+	describe('php-to-node module functions', function() {
+		const phpModule = require("php-to-node");
+		it('Array sorting', function() {
+			// Basic numbers
+			var a = [9, 3, 1, 7, 10, 0, 9, 6];
+			var b = a.sortAsc();
+			
+			assert.deepEqual(a, [0, 1, 3, 6, 7, 9, 9, 10]); // Verify in place conversion
+			assert.deepEqual(b, [0, 1, 3, 6, 7, 9, 9, 10]);
+			b = b.sortDesc();
+			assert.deepEqual(b, [10, 9, 9, 7, 6, 3, 1, 0]);
+			// Sort the sorted array, should be the same
+			b = b.sortDesc();
+			assert.deepEqual(b, [10, 9, 9, 7, 6, 3, 1, 0]);
+			b.shuffle();
+			assert.equal(b.length, 8);
+			assert.notDeepEqual(b,[10, 9, 9, 7, 6, 3, 1, 0], "Shuffle same as orignal, unlikely but possible");
+			
+			// String values
+			a = ['oranges', 'apples', 'pears', 'lemons'];
+			a = a.sortDesc();
+			assert.deepEqual(a, ['pears', 'oranges', 'lemons', 'apples']);
+			a = ['oranges', 'apples', 'pears', 'lemons'];
+			a.sortAsc();
+			assert.deepEqual(a, ['apples', 'lemons', 'oranges', 'pears']);
+		});
+	});	
 });
