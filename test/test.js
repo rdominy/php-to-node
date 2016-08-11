@@ -10,7 +10,7 @@ function cleanup() {
 		fs.unlinkSync(resultsFilePath);
 	}
 	catch (e) {
-		
+
 	}
 }
 
@@ -60,11 +60,11 @@ describe('php-to-node', function() {
 	});
 	describe('php-to-node module functions', function() {
 		const phpModule = require("php-to-node");
-		it('Array sorting', function() {
+		it('sorts arrays', function() {
 			// Basic numbers
 			var a = [9, 3, 1, 7, 10, 0, 9, 6];
 			var b = a.sortAsc();
-			
+
 			assert.deepEqual(a, [0, 1, 3, 6, 7, 9, 9, 10]); // Verify in place conversion
 			assert.deepEqual(b, [0, 1, 3, 6, 7, 9, 9, 10]);
 			b = b.sortDesc();
@@ -75,7 +75,7 @@ describe('php-to-node', function() {
 			b.shuffle();
 			assert.equal(b.length, 8);
 			assert.notDeepEqual(b,[10, 9, 9, 7, 6, 3, 1, 0], "Shuffle same as orignal, unlikely but possible");
-			
+
 			// String values
 			a = ['oranges', 'apples', 'pears', 'lemons'];
 			a = a.sortDesc();
@@ -84,5 +84,56 @@ describe('php-to-node', function() {
 			a.sortAsc();
 			assert.deepEqual(a, ['apples', 'lemons', 'oranges', 'pears']);
 		});
-	});	
+		it('array_column', function() {
+			// array of objects
+			var testArray = [
+				{key: 1234, color: 'red', type: 'apples'},
+				{key: 56, color: 'orange', type: 'oranges'},
+				{key: 78, color: 'yellow', type: 'lemons'},
+				{key: 9, type: 'pears'}
+			];
+			var a = phpModule.array_column(testArray, 'color');
+			assert.deepEqual(a, ['red', 'orange', 'yellow']);
+			a = phpModule.array_column(testArray, 'type');
+			assert.deepEqual(a, ['apples', 'oranges', 'lemons', 'pears']);
+			a = phpModule.array_column(testArray, 'key');
+			assert.deepEqual(a, [1234, 56, 78, 9]);
+			a = phpModule.array_column(testArray, 'nosuch');
+			assert.deepEqual(a, []);
+
+			// empty or null array
+			a = phpModule.array_column(null, 'nosuch');
+			assert.deepEqual(a, []);
+			a = phpModule.array_column([], 'nosuch');
+			assert.deepEqual(a, []);
+			a = phpModule.array_column({}, 'nosuch');
+			assert.deepEqual(a, []);
+
+			// object/hash
+			var testObj = {
+				item1: {key: 1234, color: 'red', type: 'apples'},
+				item2: {key: 56, color: 'orange', type: 'oranges'},
+				item3: {key: 78, color: 'yellow', type: 'lemons'},
+				item4: {key: 9, type: 'pears'}
+			};
+			a = phpModule.array_column(testObj, 'color');
+			assert.deepEqual(a, ['red', 'orange', 'yellow']);
+			a = phpModule.array_column(testObj, 'type');
+			assert.deepEqual(a, ['apples', 'oranges', 'lemons', 'pears']);
+			a = phpModule.array_column(testObj, 'key');
+			assert.deepEqual(a, [1234, 56, 78, 9]);
+			a = phpModule.array_column(testObj, 'nosuch');
+			assert.deepEqual(a, []);
+		});
+		it('in_array', function() {
+			var testArray = [13, 'red', 'apple'];
+			assert(phpModule.in_array(13, testArray));
+			assert(phpModule.in_array('red', testArray));
+			assert(phpModule.in_array('apple', testArray));
+			assert(!phpModule.in_array('nosuch', testArray));
+		});
+		it('implode', function() {
+			assert.equal(phpModule.implode(',', [13, 'red', 'apple']), '13,red,apple');
+			assert.equal(phpModule.implode('|', [13, 'red', 'apple']), '13|red|apple');
+		});	});
 });

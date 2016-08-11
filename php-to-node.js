@@ -72,6 +72,34 @@ module.exports.htmlspecialchars = function(text) {
   return text.replace(/[&<>"']/g, function(m) { return map[m]; });
 }
 
+module.exports.array_column = function(arrayOrObj, key) {
+	var results = []
+	if (Array.isArray(arrayOrObj)) {
+		arrayOrObj.forEach(function (item) {
+			if (item && (typeof item[key] != "undefined")) {
+				results.push(item[key]);
+			}
+		});
+	}
+	else if (typeof arrayOrObj=="object") {
+		for (var objKey in arrayOrObj) {
+			if (arrayOrObj[objKey] && (typeof arrayOrObj[objKey][key] != "undefined")) {
+				results.push(arrayOrObj[objKey][key]);
+			}
+		}
+	}
+	return results;
+}
+
+module.exports.in_array = function(needle, haystack) {
+	return haystack.indexOf(needle) != -1;
+}
+
+module.exports.implode = function(glue, pieces) {
+	return pieces.join(glue);
+}
+
+
 Math.deg2rad = function(deg) {
 	return deg*Math.PI/180.0;
 }

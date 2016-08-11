@@ -26,13 +26,13 @@ var transforms = [
 	// PHP footer
 	{	search: new RegExp(/^\?\>/),
 		replace: ''
-	},	
+	},
 	// Constructor
 	{	search: new RegExp(/(public|protected|private)*\s+function\s+__construct/),
 		replace: 'constructor'
 	},
 	// Data members
-	{	search: new RegExp(/(public|protected|private)\s+\$/g), 
+	{	search: new RegExp(/(public|protected|private)\s+\$/g),
 		replace: ''
 	},
 	// Variables -- remove $
@@ -68,7 +68,7 @@ var transforms = [
 		search: new RegExp(/catch\s*\(\s*\w+\s+/),
 		replace: 'catch ('
 	},
-	
+
 	// Builtin functions
 	{	search: new RegExp(/floatval/g),
 		replace: 'Number.parseFloat'
@@ -132,6 +132,21 @@ var transforms = [
 	},
 	{	search: new RegExp(/htmlspecialchars\s*\(/g),
 		replace: 'php.htmlspecialchars('
+	},
+	{	search: new RegExp(/floor\s*\(/g),
+		replace: 'Math.floor('
+	},
+	{	search: new RegExp(/round\s*\(/g),
+		replace: 'Math.round('
+	},
+	{	search: new RegExp(/implode\s*\(/g),
+		replace: 'php.implode('
+	},
+	{	search: new RegExp(/array_column\s*\(/g),
+		replace: 'php.array_column('
+	},
+	{	search: new RegExp(/in_array\s*\(/g),
+		replace: 'php.in_array('
 	}
 ];
 
@@ -170,7 +185,7 @@ function checkLine(line) {
 	if (/^\s*class/.test(line)) {
 		classBegin = true;
 		functionBegin = false;
-		
+
 		var matches = line.match(/^\s*class\s+(\w+)/);
 		if (matches && matches.length>=2) {
 			classes.push(matches[1]);
@@ -184,7 +199,7 @@ function checkLine(line) {
 		classBegin = false;
 		inConstructor = false;
 	}
-	
+
 	// If we're starting a new function or method, reset variable declarations
 	if (/^\s*(public\s+|protected\s+|private\s+)*function/.test(line)) {
 		functionBegin = true;
@@ -194,7 +209,7 @@ function checkLine(line) {
 	if (inConstructor) {
 		gotConstructorBrace = /\{/.test(line);
 	}
-	
+
 	if (/^\?\>/.test(line)) {
 		atEnd = true;
 	}
@@ -229,9 +244,9 @@ const rl = readline.createInterface({
 
 rl.on('line', function (line) {
 	var newLine = line;
-	
+
 	checkLine(newLine);
-	
+
 	transforms.forEach(function(transform) {
 		if (transform.search.test(newLine)) {
 			newLine = newLine.replace(transform.search,transform.replace);
@@ -239,23 +254,23 @@ rl.on('line', function (line) {
 				addRequires(transform.requires);
 			}
 		}
-		
+
 	});
-	
+
 	if (classBegin) {
 		if (isDataMember(newLine)) {
 			members.push(createDataMember(newLine));
 			newLine = null;
 		}
 	}
-	
+
 	if (!classBegin && !inConstructor &&  members.length>0) {
 		// Constructor must not be first method so define one now
 		writeLn("\tconstructor() {");
 		dumpMembers();
 		writeLn("\t}\n\n");
 	}
-	
+
 	if (functionBegin && /^\s*\w+\s*\=/.test(newLine)) {
 		var matches = newLine.match(/^(\s*)(\w+)(\s*\=.+)$/);
 		var whitespace = (matches.length == 4)  ? matches[1] : '';
@@ -265,15 +280,15 @@ rl.on('line', function (line) {
 			variables.push(varName);
 		}
 	}
-	
+
 	if (newLine!==null) {
 		writeLn(newLine);
 	}
-	
+
 	if (inConstructor && gotConstructorBrace && members.length>0) {
 		dumpMembers();
 	}
-	
+
 	if (atEnd) {
 		exportClasses();
 		flushBuffer();
