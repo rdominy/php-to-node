@@ -121,11 +121,11 @@ Number.prototype.pad = function(size) {
 }
 
 Array.prototype.sortAsc = function() {
-	return this.sort(function (a, b) {return a>b;});
+	return this.sort(function (a, b) {return (a==b) ? 0 : ((a>b) ? 1: -1);});
 }
 
 Array.prototype.sortDesc = function() {
-	return this.sort(function (a, b) {return a<b;});
+	return this.sort(function (a, b) {return (a==b) ? 0 : ((a<b) ? 1: -1);});
 }
 
 Array.prototype.shuffle = function() {
