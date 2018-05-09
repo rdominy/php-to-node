@@ -135,5 +135,12 @@ describe('php-to-node', function() {
 		it('implode', function() {
 			assert.equal(phpModule.implode(',', [13, 'red', 'apple']), '13,red,apple');
 			assert.equal(phpModule.implode('|', [13, 'red', 'apple']), '13|red|apple');
-		});	});
+		})
+		it('math.rand', function() {
+			for (var i=0;i<100;i++) {
+				var result = Math.rand(1,5);
+				assert([1,2,3,4,5].indexOf(result) >= 0, "Not in expected range: " + result);
+			}
+		})
+	});
 });
