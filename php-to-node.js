@@ -7,7 +7,7 @@ const fs = require('fs');
 // Released under the MIT License
 
 module.exports.empty = function(a) {
-	return !module.exports.isset(a) || ((Array.isArray(a)) && a.length==0) || (a==0) || (a=='') || (a==null);
+	return !module.exports.isset(a) || ((Array.isArray(a)) && a.length==0) || (a===0) || (a==='') || (a==null);
 }
 
 module.exports.isset = function(a) {
