@@ -59,7 +59,7 @@ describe('php-to-node', function() {
 		});
 	});
 	describe('php-to-node module functions', function() {
-		const phpModule = require("php-to-node");
+		const phpModule = require(__dirname + "/../php-to-node.js");
 		it('sorts arrays', function() {
 			// Basic numbers
 			var a = [9, 3, 1, 7, 10, 0, 9, 6];
@@ -74,7 +74,7 @@ describe('php-to-node', function() {
 			assert.deepEqual(b, [10, 9, 9, 7, 6, 3, 1, 0]);
 			b.shuffle();
 			assert.equal(b.length, 8);
-			assert.notDeepEqual(b,[10, 9, 9, 7, 6, 3, 1, 0], "Shuffle same as orignal, unlikely but possible");
+			assert.notDeepEqual(b,[10, 9, 9, 7, 6, 3, 1, 0], "Shuffle same as orignal, unlikely but possible: "+JSON.stringify(b));
 
 			// String values
 			a = ['oranges', 'apples', 'pears', 'lemons'];

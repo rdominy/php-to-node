@@ -129,5 +129,5 @@ Array.prototype.sortDesc = function() {
 }
 
 Array.prototype.shuffle = function() {
-	return this.sort(function (a, b) {return ((Math.random()>.5) ? true : false);});
+	return this.sort(function () {return ((Math.random()>.5) ? 1 : -1);});
 }
